@@ -4,7 +4,7 @@ const Potion = require('../lib/Potion');
 // mocks/replaces the constructor's implementation with our faked data
 jest.mock('../lib/Potion');
 
-console.log(new Potion());
+// console.log(new Potion());
 
 // don't need the .js extension! 
 // Node will assume that the file is a JS file if no extension is specified 
@@ -45,4 +45,38 @@ test('gets inventory from player or returns false', () => {
     player.inventory = [];
   
     expect(player.getInventory()).toEqual(false);
+});
+
+test("gets player's health value", () => {
+    const player = new Player('Dave');
+  
+    expect(player.getHealth()).toEqual(expect.stringContaining(player.health.toString()));
+    // The expect.stringContaining() method is an expect method that we can use to make sure our string includes our player's health
+});
+
+test('checks if player is alive or not', () => {
+    const player = new Player('Dave');
+
+    // Here, we're updating the value of our Player health halfway through the test so that we can check for both conditions: true and false
+  
+    expect(player.isAlive()).toBeTruthy();
+  
+    player.health = 0;
+  
+    expect(player.isAlive()).toBeFalsy();
+});
+
+test("subtracts from player's health", () => {
+    const player = new Player('Dave');
+    const oldHealth = player.health;
+
+    // call the reduceHealth() method twice—the second time with an absurdly high value to make sure that it never goes negative
+  
+    player.reduceHealth(5);
+  
+    expect(player.health).toBe(oldHealth - 5);
+  
+    player.reduceHealth(99999);
+  
+    expect(player.health).toBe(0);
 });
